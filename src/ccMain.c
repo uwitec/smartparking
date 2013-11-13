@@ -1,4 +1,8 @@
+
 #include "WengPIC.h"
+#include "smartparking.h"
+
+//#include    "define.h"
 
 #define _GID		ccbuf[1]
 #define _SID 		ccbuf[3]
@@ -6,6 +10,9 @@
 #define GID		10
 #define MyID            99
 #define TID     	8
+
+
+
 //#define TID2            99
 uint8 ccbuf[64];
 uint8 CNT,vs;
@@ -88,11 +95,25 @@ void ccRXProc(void){
 }
 
 void main(void){
+
+     // --all init variable define here--
+
+       Packet packet;
+       Client client[MAX_CLIENT];
+
+       packet.type=RESET;
+
+    //-----------------
+
+
+
 	ANCON0 = 0xFF;
 	ANCON1 = 0x1F;
 	ccInit();
 	ccSIDLE();
         //Tmr0Init(50);
+      
+
 	while(1){
 		Tmr0Proc();
                 //CNT++;
