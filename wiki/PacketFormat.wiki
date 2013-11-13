@@ -1,0 +1,59 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+
+uint8 ccGetPkg(uint8 *buf);
+-->說明此函式參數意義,並描描述收的方式及行為
+
+
+void ccSendPkg(uint8 *buf); 
+-->說明此函式參數意義,並描描述送的方式及行為
+
+
+// 封包格式.,底下是範例供參考. (請按此修改)
+/*
+ *   0                   1                   2                   3
+ *   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *  |        Inv_id                 |          Proto_id             |
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *  |         length                |Unit Identifer |  MODBUS PDU   |
+ *  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ *
+ * The MBAP header is 7 bytes long, and includes the following fields :
+
+    inv_id  -  [ 2 bytes] invocation identification used for
+               transaction pairing
+
+    proto_id - [2 bytes] is always 0 for MODBUS services. Other
+               values are reserved for further extensions.
+
+    length - [2 bytes] The length field is a byte count of the
+             remaining fields and includes the dst_id and data fields.
+
+    unit_id - [1 byte] The unit identifier is used to identify a
+              remote server located on a non-TCP/IP network.
+ *
+ *
+    func_code - [1 byte] MODBUS function code
+
+    data - [n bytes] This field is function code dependent and
+           usually contains information such as variable references,
+ *
+ *   Code    Name              Meaning
+     ----    --------         ------------
+      01    ILLEGAL FUNCTION  The function code received in the request
+   *                           is not an allowable action for the server.
+
+     02    ILLEGAL DATA   The data address received in the request
+            ADDRESS        is not an allowable address for the server.
+
+ */
+
+= Details =
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
