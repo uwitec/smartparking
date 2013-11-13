@@ -1,42 +1,43 @@
 #include "WengPIC.h"
-//asasa 
+
 #define _GID		ccbuf[1]
 #define _SID 		ccbuf[3]
 #define _TID		ccbuf[4]
 #define GID		10
-#define MyID            66
+#define MyID            99
 #define TID     	8
-#define TID2            99
+//#define TID2            99
 uint8 ccbuf[64];
 uint8 CNT,vs;
 uint24 ad200;
-uint8 crv[10]={0,1,1,1,0,0,0,1,1,0};
+uint8 crv[10]={0,0,1,1,0,0,1,1,0,1};
 void LcdPkg(void){
 	LPutC(_SID/10+'0');LPutC(_SID%10+'0');LPutC(' ');
 	LPutC(_TID/10+'0');LPutC(_TID%10+'0');LPutC(' ');
 	LPutC(ccbuf[5]);   LPutC(ccbuf[6]);
-	LPutC(ccbuf[7]);   LPutC(ccbuf[8]);LPutC(' ');
+	LPutC(ccbuf[7]);   LPutC(ccbuf[8]);//LPutC(' ');
 	LPutC(ccbuf[9]);   LPutC(ccbuf[10]);
 	LPutC(ccbuf[11]);  LPutC(ccbuf[12]);
+        LPutC(ccbuf[13]);  LPutC(ccbuf[14]);
 
 }
 
-void PrePkg(uint16 vr, uint8 sw){
-	uint8 a,b;
+void PrePkg(uint8 cv[8]){
 	ccbuf[0]=12;
 	_GID=GID ;
 	ccbuf[2]=GID>>8;
 	_SID=MyID;
 	_TID=TID;
 
-	a=vr/100; b=vr%100;
-	ccbuf[5]=a/10+'0'; ccbuf[6]=a%10+'0';
-	ccbuf[7]=b/10+'0'; ccbuf[8]=b%10+'0';
+	//a=vr/100; b=vr%100;
+	ccbuf[5]=cv[0]+'0'; ccbuf[6]=cv[1]+'0';
+	ccbuf[7]=cv[2]+'0'; ccbuf[8]=cv[3]+'0';
 
-	ccbuf[9]=B0(sw)+'0';
-	ccbuf[10]=B1(sw)+'0';
-	ccbuf[11]=B2(sw)+'0';
-	ccbuf[12]=B3(sw)+'0';
+	ccbuf[9]=cv[4]+'0';ccbuf[11]=cv[6]+'0';
+	ccbuf[10]=cv[5]+'0';ccbuf[12]=cv[7]+'0';
+
+        ccbuf[13]=cv[8]+'0';ccbuf[14]=cv[9]+'0';
+        
 
 }
 
@@ -66,13 +67,13 @@ void ccRXProc(void){
 		uint8 r1;
 		case 1:
 			r1=ccGetPkg(ccbuf);
-			if(r1==0){
-				if(_TID==MyID ){
-                                   LcdAddr(0x40);
-                                   LcdPkg();
-
-
-                                }
+			if(r1==0){if(_TID==MyID ){
+                            LcdAddr(0x40);
+                            LcdPkg();
+                            uartinit();
+                            INTON();
+                            rprint(ccbuf);
+                        }
                             //LcdAddr(0x40); LcdPkg();
                            // if(ccbuf[9] == 1 &&){ccSendPkg(crv);}
 			}
@@ -94,14 +95,14 @@ void main(void){
         //Tmr0Init(50);
 	while(1){
 		Tmr0Proc();
-		CNT++;
-		ad200 += GetADC(4);
-		vs |= BtnProc();
+                //CNT++;
+		//ad200 += GetADC(4);
+		//vs |= BtnProc();
 		if (CNT>199 ){
 
-                            PrePkg(ad200/200,vs);
+                            PrePkg(crv);
                             LcdAddr(0); LcdPkg();
-                            ad200=0; vs=0;
+                         //   ad200=0; vs=0;
                             CNT=0;
                             ccSIDLE(); ccSFTX();
                             ccSendPkg(ccbuf);
@@ -114,9 +115,8 @@ void main(void){
                             ccSIDLE(); ccSFTX();
                             ccSendPkg(ccbuf);
 		}*/
-		else{
-			ccRXProc();
-		}
+		else{ccRXProc();
+                }
 	}
 }
 
