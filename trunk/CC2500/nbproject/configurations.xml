@@ -4,7 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>../h/mydefine.h</itemPath>
       <itemPath>../h/smartparking.h</itemPath>
       <itemPath>../h/define.h</itemPath>
     </logicalFolder>
