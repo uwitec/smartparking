@@ -44,18 +44,12 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 # Distribution Directory
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
-# Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=../src/ccMain.c
-
 # Object Files Quoted if spaced
 OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/1360937237/ccMain.o
 POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/1360937237/ccMain.o.d
 
 # Object Files
 OBJECTFILES=${OBJECTDIR}/_ext/1360937237/ccMain.o
-
-# Source Files
-SOURCEFILES=../src/ccMain.c
 
 
 CFLAGS=
@@ -89,7 +83,6 @@ ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 ${OBJECTDIR}/_ext/1360937237/ccMain.o: ../src/ccMain.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1360937237 
 	@${RM} ${OBJECTDIR}/_ext/1360937237/ccMain.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/ccMain.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -I"../wengpic" -I"../h" -ms -oa-  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/_ext/1360937237/ccMain.o   ../src/ccMain.c 
 	@${DEP_GEN} -d ${OBJECTDIR}/_ext/1360937237/ccMain.o 
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/ccMain.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
@@ -98,7 +91,6 @@ else
 ${OBJECTDIR}/_ext/1360937237/ccMain.o: ../src/ccMain.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1360937237 
 	@${RM} ${OBJECTDIR}/_ext/1360937237/ccMain.o.d 
-	@${RM} ${OBJECTDIR}/_ext/1360937237/ccMain.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -I"../wengpic" -I"../h" -ms -oa-  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/_ext/1360937237/ccMain.o   ../src/ccMain.c 
 	@${DEP_GEN} -d ${OBJECTDIR}/_ext/1360937237/ccMain.o 
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/ccMain.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
