@@ -17,6 +17,7 @@
                    projectFiles="true">
       <itemPath>../src/ccMain.c</itemPath>
       <itemPath>../src/rfim.c</itemPath>
+      <itemPath>../src/IRsense.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

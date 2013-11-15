@@ -45,11 +45,11 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/1360937237/ccMain.o ${OBJECTDIR}/_ext/1360937237/rfim.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/1360937237/ccMain.o.d ${OBJECTDIR}/_ext/1360937237/rfim.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/_ext/1360937237/ccMain.o ${OBJECTDIR}/_ext/1360937237/rfim.o ${OBJECTDIR}/_ext/1360937237/IRsense.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/_ext/1360937237/ccMain.o.d ${OBJECTDIR}/_ext/1360937237/rfim.o.d ${OBJECTDIR}/_ext/1360937237/IRsense.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/_ext/1360937237/ccMain.o ${OBJECTDIR}/_ext/1360937237/rfim.o
+OBJECTFILES=${OBJECTDIR}/_ext/1360937237/ccMain.o ${OBJECTDIR}/_ext/1360937237/rfim.o ${OBJECTDIR}/_ext/1360937237/IRsense.o
 
 
 CFLAGS=
@@ -94,6 +94,13 @@ ${OBJECTDIR}/_ext/1360937237/rfim.o: ../src/rfim.c  nbproject/Makefile-${CND_CON
 	@${DEP_GEN} -d ${OBJECTDIR}/_ext/1360937237/rfim.o 
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/rfim.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
+${OBJECTDIR}/_ext/1360937237/IRsense.o: ../src/IRsense.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/_ext/1360937237 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/IRsense.o.d 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -D__DEBUG  -p$(MP_PROCESSOR_OPTION) -I"../wengpic" -I"../h" -ms -oa-  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/_ext/1360937237/IRsense.o   ../src/IRsense.c 
+	@${DEP_GEN} -d ${OBJECTDIR}/_ext/1360937237/IRsense.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/IRsense.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
 else
 ${OBJECTDIR}/_ext/1360937237/ccMain.o: ../src/ccMain.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1360937237 
@@ -108,6 +115,13 @@ ${OBJECTDIR}/_ext/1360937237/rfim.o: ../src/rfim.c  nbproject/Makefile-${CND_CON
 	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -I"../wengpic" -I"../h" -ms -oa-  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/_ext/1360937237/rfim.o   ../src/rfim.c 
 	@${DEP_GEN} -d ${OBJECTDIR}/_ext/1360937237/rfim.o 
 	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/rfim.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
+	
+${OBJECTDIR}/_ext/1360937237/IRsense.o: ../src/IRsense.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/_ext/1360937237 
+	@${RM} ${OBJECTDIR}/_ext/1360937237/IRsense.o.d 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -p$(MP_PROCESSOR_OPTION) -I"../wengpic" -I"../h" -ms -oa-  -I ${MP_CC_DIR}\\..\\h  -fo ${OBJECTDIR}/_ext/1360937237/IRsense.o   ../src/IRsense.c 
+	@${DEP_GEN} -d ${OBJECTDIR}/_ext/1360937237/IRsense.o 
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1360937237/IRsense.o.d" $(SILENT) -rsi ${MP_CC_DIR}../ -c18 
 	
 endif
 
