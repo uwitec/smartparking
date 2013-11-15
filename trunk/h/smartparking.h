@@ -68,13 +68,17 @@ typedef struct client_info {
 #define MAX_CLIENT 10
 
 //按word檔做, 但尚不知其意
-typedef enum {RESET=1,ASK,ECHO,CMD, ACK} TYPE;
-typedef enum {ENTER, PARKING} SUBTYPE ;  // role?
+typedef enum {RESET=1,ASK=2,ECHO=3,CMD=4, ACK=5} TYPE;
+typedef enum {ENTER=6, PARKING=7} SUBTYPE ;  // role?
 
 
 
-
-
+typedef struct s_table {
+    uint8 ID[8];
+    uint32 IT;
+    uint8 PARK;
+    uint32 PT;
+} STABLE;
 
 
 
