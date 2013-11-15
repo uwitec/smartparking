@@ -48,13 +48,13 @@
 
 
 typedef struct _packet {
-  uint8 length;
+
   uint8 type:4; // for different intention
   uint8 subtype:4;
   uint8 srcID;  //source ID
   uint8 dstID;  // destionation ID
-  uint8 Data[4];  // data to be transmited/received
-  uint32 crc;  //for crc
+  uint8 data_len;
+  uint8 data[12];  // data to be transmited/received
 } Packet;
 
 
