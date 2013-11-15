@@ -3,46 +3,46 @@
 #include "smartparking.h"
 #include <string.h>
 
-
-
+void SendPkg(Packet* pkt, int len);
+//dump packet
+void LcdPkg(Packet *packet);
 
 
 uint8 ccbuf[64];
 uint8 CNT;
 
-Packet packet;
+
 Client client[MAX_CLIENT];
 
-void LcdPkg(void){
+void LcdPkg(Packet *packet)
+{
       //  Packet* pPacket = (Packet*) ccbuf;
-	LPutC(packet.length+'0');LPutC(' ');
-	LPutC(packet.srcID/100+'0'); LPutC((packet.srcID/10)%10+'0'); LPutC(packet.srcID%10+'0'); LPutC(' ');
-        LPutC(packet.dstID/100+'0'); LPutC((packet.dstID/10)%10+'0'); LPutC(packet.dstID%10+'0'); LPutC(' ');
-	LPutC(packet.Data[0]+'0');   LPutC(packet.Data[1]+'0');
-	LPutC(packet.Data[2]+'0');   LPutC(packet.Data[3]+'0');
+	LPutC(packet->data_len+'0');LPutC(' ');
+	LPutC(packet->srcID/100+'0'); LPutC((packet->srcID/10)%10+'0'); LPutC(packet->srcID%10+'0'); LPutC(' ');
+        LPutC(packet->dstID/100+'0'); LPutC((packet->dstID/10)%10+'0'); LPutC(packet->dstID%10+'0'); LPutC(' ');
+	LPutC(packet->data[0]+'0');   LPutC(packet->data[1]+'0');
+	LPutC(packet->data[2]+'0');   LPutC(packet->data[3]+'0');
+        
 }
 
-void PrePkg( Packet packet){
-    memcpy(ccbuf , &packet ,sizeof(packet) );
-}
 
-void ccRXProc(void){
+void ccRXProc(Packet *packet)
+{
 	uint8 r;
 	r=ccFSM();
 	switch (r){
 		uint8 r1;
-		case 1:
+		case 1: // ????
 			r1=ccGetPkg(ccbuf);
 			if(r1==0){//if( ccbuf[3]=packet.srcID){}
-                            memcpy(&packet , ccbuf,sizeof(Packet));
+                            memcpy((void *)packet, (void *)&ccbuf[1],sizeof(Packet));
                             LcdAddr(0x40);
-                            LcdPkg();
-                           
-                          
+                            LcdPkg(packet);
+                                                     
                                 }
 				ccSRX();
 				break;
-		case 17:
+		case 17:  //// ????
 			ccSFRX();
 			ccSIDLE();
 			ccSRX();
@@ -53,8 +53,8 @@ void ccRXProc(void){
 void main(void){
 
      // --all init variable define here--
-
-      
+      Packet packet;
+      Packet rxpacket;
 /*
        packet.type=ASK;
        packet.subtype=ENTER;
@@ -66,14 +66,11 @@ void main(void){
    // int i = 0;
        packet.type=ECHO;
        packet.subtype=ENTER;
-       packet.length=5;
        packet.srcID=254;
        packet.dstID=1;
+       packet.data_len=0;
       // for(i=0; i<sizeof(tempData); i++)
            //packet.Data[i] = tempData[i];
-
-    //-----------------
-
 
 
 	ANCON0 = 0xFF;
@@ -88,14 +85,16 @@ void main(void){
                CNT++;
 		if (CNT>199 ){
                             
-                            PrePkg(packet);
-                            LcdAddr(0); LcdPkg();
+                           // PrePkg(packet);
+                            LcdAddr(0); LcdPkg(&packet);
                             CNT=0;
                             ccSIDLE(); ccSFTX();
-                            ccSendPkg(ccbuf);
+                            SendPkg(&packet,sizeof(Packet));
                 }
             
-		else{ccRXProc();}
+		else {
+                    ccRXProc(&rxpacket);
+                }
                 //
 	}
 }
@@ -110,7 +109,7 @@ uint8 CARIND=0;
 } STABLE;
 */
 void IDcopy(uint8* dis, uint8* src, int iSize){
-    memcpy(dis,src,iSize);
+    memcpy((void *)dis,(void *)src,iSize);
 }
 uint8 id[8];
 STABLE mystable[10];
@@ -128,3 +127,11 @@ void test(void){
 
 
 
+void SendPkg(Packet * pkt, int len)
+{
+
+   ccbuf[0]=len;  //must describe here
+   memcpy((void *)&ccbuf[1] ,(void *)pkt ,len );
+   ccSendPkg(ccbuf);
+
+}
