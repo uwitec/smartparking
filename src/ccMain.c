@@ -1,71 +1,30 @@
 
 #include "WengPIC.h"
 #include "smartparking.h"
-
-//#include    "define.h"
-
-#define _GID		ccbuf[1]
-#define _SID 		ccbuf[3]
-#define _TID		ccbuf[4]
-#define GID		10
-#define MyID            99
-#define TID     	8
+#include <string.h>
 
 
 
-//#define TID2            99
+
+
 uint8 ccbuf[64];
-uint8 CNT,vs;
-uint24 ad200;
-uint8 crv[10]={0,0,1,1,0,0,1,1,0,1};
+uint8 CNT;
+
+Packet packet;
+Client client[MAX_CLIENT];
+
 void LcdPkg(void){
-	LPutC(_SID/10+'0');LPutC(_SID%10+'0');LPutC(' ');
-	LPutC(_TID/10+'0');LPutC(_TID%10+'0');LPutC(' ');
-	LPutC(ccbuf[5]);   LPutC(ccbuf[6]);
-	LPutC(ccbuf[7]);   LPutC(ccbuf[8]);//LPutC(' ');
-	LPutC(ccbuf[9]);   LPutC(ccbuf[10]);
-	LPutC(ccbuf[11]);  LPutC(ccbuf[12]);
-        LPutC(ccbuf[13]);  LPutC(ccbuf[14]);
-
+      //  Packet* pPacket = (Packet*) ccbuf;
+	LPutC(packet.length+'0');LPutC(' ');
+	LPutC(packet.srcID/100+'0'); LPutC((packet.srcID/10)%10+'0'); LPutC(packet.srcID%10+'0'); LPutC(' ');
+        LPutC(packet.dstID/100+'0'); LPutC((packet.dstID/10)%10+'0'); LPutC(packet.dstID%10+'0'); LPutC(' ');
+	LPutC(packet.Data[0]+'0');   LPutC(packet.Data[1]+'0');
+	LPutC(packet.Data[2]+'0');   LPutC(packet.Data[3]+'0');
 }
 
-void PrePkg(uint8 cv[8]){
-	ccbuf[0]=12;
-	_GID=GID ;
-	ccbuf[2]=GID>>8;
-	_SID=MyID;
-	_TID=TID;
-
-	//a=vr/100; b=vr%100;
-	ccbuf[5]=cv[0]+'0'; ccbuf[6]=cv[1]+'0';
-	ccbuf[7]=cv[2]+'0'; ccbuf[8]=cv[3]+'0';
-
-	ccbuf[9]=cv[4]+'0';ccbuf[11]=cv[6]+'0';
-	ccbuf[10]=cv[5]+'0';ccbuf[12]=cv[7]+'0';
-
-        ccbuf[13]=cv[8]+'0';ccbuf[14]=cv[9]+'0';
-        
-
+void PrePkg( Packet packet){
+    memcpy(ccbuf , &packet ,sizeof(packet) );
 }
-
-/*void PrePkg2(uint16 vr, uint8 sw){
-	uint8 a,b;
-	ccbuf[0]=12;
-	_GID=GID;
-	ccbuf[2]=GID>>8;
-	_SID=MyID;
-	_TID=TID2;
-
-	a=vr/100; b=vr%100;
-	ccbuf[5]=a/10+'0'; ccbuf[6]=a%10+'0';
-	ccbuf[7]=b/10+'0'; ccbuf[8]=b%10+'0';
-
-	ccbuf[9]=B0(sw)+'0';
-	ccbuf[10]=B1(sw)+'0';
-	ccbuf[11]=B2(sw)+'0';
-	ccbuf[12]=B3(sw)+'0';
-
-}*/
 
 void ccRXProc(void){
 	uint8 r;
@@ -74,16 +33,13 @@ void ccRXProc(void){
 		uint8 r1;
 		case 1:
 			r1=ccGetPkg(ccbuf);
-			if(r1==0){if(_TID==MyID ){
+			if(r1==0){//if( ccbuf[3]=packet.srcID){}
+                            memcpy(&packet , ccbuf,sizeof(Packet));
                             LcdAddr(0x40);
                             LcdPkg();
-                            uartinit();
-                            INTON();
-                            rprint(ccbuf);
-                        }
-                            //LcdAddr(0x40); LcdPkg();
-                           // if(ccbuf[9] == 1 &&){ccSendPkg(crv);}
-			}
+                           
+                          
+                                }
 				ccSRX();
 				break;
 		case 17:
@@ -98,10 +54,23 @@ void main(void){
 
      // --all init variable define here--
 
-       Packet packet;
-       Client client[MAX_CLIENT];
-
-       packet.type=RESET;
+      
+/*
+       packet.type=ASK;
+       packet.subtype=ENTER;
+       packet.length=2;
+       packet.srcID=254;
+       packet.dstID=1;
+*/
+   // uint8 tempData[4] = {4,6,9,1};
+   // int i = 0;
+       packet.type=ECHO;
+       packet.subtype=ENTER;
+       packet.length=5;
+       packet.srcID=254;
+       packet.dstID=1;
+      // for(i=0; i<sizeof(tempData); i++)
+           //packet.Data[i] = tempData[i];
 
     //-----------------
 
@@ -116,28 +85,46 @@ void main(void){
 
 	while(1){
 		Tmr0Proc();
-                //CNT++;
-		//ad200 += GetADC(4);
-		//vs |= BtnProc();
+               CNT++;
 		if (CNT>199 ){
-
-                            PrePkg(crv);
+                            
+                            PrePkg(packet);
                             LcdAddr(0); LcdPkg();
-                         //   ad200=0; vs=0;
                             CNT=0;
                             ccSIDLE(); ccSFTX();
                             ccSendPkg(ccbuf);
                 }
-                /*else if(CNT>399){
-                            PrePkg2(ad200/200,vs);
-                            LcdAddr(0); LcdPkg();
-                            ad200=0; vs=0;
-                            CNT=0;
-                            ccSIDLE(); ccSFTX();
-                            ccSendPkg(ccbuf);
-		}*/
-		else{ccRXProc();
-                }
+            
+		else{ccRXProc();}
+                //
 	}
 }
+
+
+uint8 CARIND=0;
+/*typedef struct s_table {
+    uint8 ID[8];
+    uint32 IT;
+    uint8 PARK;
+    uint32 PT;
+} STABLE;
+*/
+void IDcopy(uint8* dis, uint8* src, int iSize){
+    memcpy(dis,src,iSize);
+}
+uint8 id[8];
+STABLE mystable[10];
+STABLE *sp;
+void test(void){
+    
+    
+    sp = &mystable[CARIND];
+    IDcopy(sp->ID,id,sizeof(id));
+    sp->IT++;
+    sp->PARK=1;
+    sp->PT++;
+
+}
+
+
 

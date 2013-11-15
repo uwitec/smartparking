@@ -2,53 +2,55 @@
 #include <delays.h>
 #include "define.h"
 
-#define psta B2(tmp)  //psta=paring lot status
-#define delay() Delay1KTCYx(10000000000000)
-
-
-
+#define irsense B2(tmp)  //psta=paring lot status
+#define t1000 1000
 
 uint8 irsta=0;
+uint8 psta;
+uint16 oncnt=0, offcnt=0;
+
+
 uint8 IRsense(void){
 
     uint8 tmp;
     DIRIN(TRISD,BIT2);
- //   Nop();Nop();
+    Nop();Nop();Nop();Nop();
     tmp=PORTD;
- //   DIROUT(TRISD,BIT2);
+    DIROUT(TRISC,BIT2);
 
 
     switch(irsta){
-        case 0:
-            if(psta==0) {irsta=1;}
-            break;
-
+   
         case 1:
-            if(psta==0) {irsta=2;}
-            else {irsta=0;}
+            psta=0;
+            B2(LATC)=0;
+            if(irsense==1) {oncnt=0;irsta=2;}
+          //  else {irsta=1;}
             break;
 
         case 2:
-            irsta=3;
+            oncnt++;
+            if(oncnt>t1000) {irsta=3;}
+            if(irsense==0) {irsta=1;}
+            break;
 
-            return 1;
 
         case 3:
-            if(psta==1) {irsta=4;}
-            else {irsta=3;}
+            psta=1;
+            B2(LATC)=1;
+            if(irsense==0) {irsta=4;offcnt=0;}
             break;
 
         case 4:
-       
-            if(psta==1) {irsta=5;}
-            //else{swsta=3;}
+            offcnt++;
+            if(offcnt>t1000) {irsta=1;}
+            if(irsense==1) {irsta=3;}
+           
             break;
 
-        case 5:
-            irsta=0;
+        default: irsta=1; break;
 
-            delay();
-            return 2;
-            break;
+     
     }
+    return irsta;
 }

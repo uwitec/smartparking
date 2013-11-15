@@ -15,7 +15,6 @@
 
 #define rcv     ccbuf
 
-#if 1
 extern uint8 ccbuf[64];
 //uint8 rcv[64];
 uint8 psta;//parking status
@@ -145,4 +144,4 @@ int rfim(){
 }
 
 
-#endif
+
